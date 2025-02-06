@@ -10,11 +10,11 @@ import Foundation
 
 @Model
 class Habit {
-    var id: UUID
+    var id: UUID = UUID()
     var name: String
+    var created: Date = Date()
 
-    init(id: UUID? = nil, name: String) {
-        self.id = id ?? UUID()
+    init(name: String) {
         self.name = name
     }
 }

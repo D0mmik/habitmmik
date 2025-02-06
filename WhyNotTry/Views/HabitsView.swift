@@ -11,46 +11,56 @@ import _SwiftData_SwiftUI
 
 struct HabitsView: View {
     
-    @State private var isOpen = false
+    @State private var isOpenNewHabit = false
+    @State private var isOpenAlert = false
     
-    @Query var habits: [Habit]
+    @Query(sort: \Habit.created) var habits: [Habit]
     
     @Environment(\.modelContext) private var context
+    
+    @State private var habitToDelete: Habit?
     
     var body: some View {
         NavigationStack {
             HStack {
-                Text("Your Habits \(habits.count)")
+                Text("Your Habits")
                     .font(.system(size: 35))
                     .bold()
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                Image(systemName: "gear")
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .padding()
             }
             List{
                 ForEach(habits, id: \.self) {habit in
-                    NavigationLink(String(habit.name ?? "unknown")) {
-                        HabitDetailView(habitName: "habit name \(habit.name)")
-                    }.swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button(role: .destructive) {
-                            
-                            context.delete(habit)
-                            
+                    NavigationLink(habit.name) {
+                        HabitDetailView(habit: habit)
+                    }.swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button {
+                            isOpenAlert = true
+                            habitToDelete = habit
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
+                        .tint(.red)
                     }
+                }
+            }.alert("Are you sure?", isPresented: $isOpenAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Delete", role: .destructive) {
+                    if let habitToDelete {
+                        context.delete(habitToDelete)
+                    }
+                }
+            } message: {
+                if let habitToDelete {
+                    Text("You are deleting \(habitToDelete.name)")
                 }
             }
             HStack {
                 Spacer()
                 Button("Add new habit") {
-                    isOpen = true
-                }.sheet(isPresented: $isOpen, content: {
-                    NewHabitView(isOpen: $isOpen)
+                    isOpenNewHabit = true
+                }.sheet(isPresented: $isOpenNewHabit, content: {
+                    NewHabitView(isOpen: $isOpenNewHabit)
                         .presentationDetents([.medium])
                 })
                 

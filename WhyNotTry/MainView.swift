@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MainView: View {
     
     var body: some View {
         HabitsView()
-            .modelContainer(for: [Habit.self])
+            .modelContainer(for: [Habit.self, HabitLog.self])
     }
 }
 #Preview {

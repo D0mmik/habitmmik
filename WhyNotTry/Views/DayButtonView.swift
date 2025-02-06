@@ -11,13 +11,13 @@ struct DayButtonView: View {
     
     let text: String;
     let isToday: Bool;
-    @State private var isActive: Bool = false
+    let isActive: Bool;
     
     var body: some View {
         
         
         Button(String(text)) {
-            isActive.toggle()
+            
         }
         .frame(width: 40, height: 40)
         .background(isActive ? .blue : .clear)
@@ -31,5 +31,5 @@ struct DayButtonView: View {
 }
 
 #Preview {
-    DayButtonView(text: "10", isToday: true)
+    DayButtonView(text: "10", isToday: true, isActive: true)
 }
