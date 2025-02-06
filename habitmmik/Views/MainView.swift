@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 import _SwiftData_SwiftUI
 
-struct HabitsView: View {
+struct MainView: View {
     
     @State private var isOpenNewHabit = false
     @State private var isOpenAlert = false

@@ -13,6 +13,3 @@ struct SettingsView: View {
         Text("Settings")
     }
 }
-#Preview {
-    MainView()
-}
